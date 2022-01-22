@@ -28,6 +28,8 @@ export const parsePos = part => {
     } else if (Object.hasOwn(part, "Adjective"))
         if (part.Adjective === "PreNounVerb")
             partsOfSpeech.push(`Pre-noun/verb adj.`);
+        else if (part.Adjective === "Keiyoushi")
+            partsOfSpeech.push(`I-adj. 【Keiyoushi】`)
         else partsOfSpeech.push(`${part.Adjective} adj.`);
     else partsOfSpeech.push(JSON.stringify(part.Verb));
 
