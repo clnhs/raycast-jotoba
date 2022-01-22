@@ -9,8 +9,8 @@
   "commands": [
     {
       "name": "index",
-      "title": "jotoba",
-      "subtitle": "Search Japanese Dictionaries",
+      "title": "Jotoba",
+      "subtitle": "Search Jotoba",
       "description": "Search Jotoba.de from the comfort of Raycast.",
       "mode": "view"
     }
