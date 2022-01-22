@@ -12,13 +12,13 @@ import {
     useNavigation,
     Color,
 } from "@raycast/api";
-import {useState, useEffect, useRef} from "react";
-import fetch, {AbortError} from "node-fetch";
+import { useState, useEffect, useRef } from "react";
+import fetch, { AbortError } from "node-fetch";
 
-import {parsePos, parseReadings} from "./JotobaUtils";
+import { parsePos, parseReadings } from "./JotobaUtils";
 
 export default function Command() {
-    const {state, search} = useSearch();
+    const { state, search } = useSearch();
 
     return (
         <List
@@ -32,7 +32,7 @@ export default function Command() {
                 subtitle={state.results.parsedWords.length + ""}
             >
                 {state.results.parsedWords.map(wordResult => (
-                    <WordListItem key={wordResult.id} wordResult={wordResult}/>
+                    <WordListItem key={wordResult.id} wordResult={wordResult} />
                 ))}
             </List.Section>
             <List.Section
@@ -50,7 +50,7 @@ export default function Command() {
     );
 }
 
-function OpenInJotoba({word}: { word: string }) {
+function OpenInJotoba({ word }: { word: string }) {
     return (
         <OpenInBrowserAction
             title="Open on Jotoba.de"
@@ -59,9 +59,9 @@ function OpenInJotoba({word}: { word: string }) {
     );
 }
 
-function WordDetailsView({wordResult}: { wordResult: WordResult }) {
-    const {reading, kanaReading, common, senses, url} = wordResult;
-    const {pop} = useNavigation();
+function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
+    const { reading, kanaReading, common, senses, pitch, url } = wordResult;
+    const { pop } = useNavigation();
     const title = `${
         reading !== kanaReading
             ? reading + "【" + kanaReading + "】"
@@ -77,14 +77,22 @@ function WordDetailsView({wordResult}: { wordResult: WordResult }) {
             return `### ${posName.join(", ")}\n${glossesList}`;
         })
         .join(`\n`);
+    const parsedPitch = pitch?.reduce((acc, curr, index) => {
+        const { part, high } = curr;
+
+        if (high) return acc + `↗${part}↘`;
+
+        return acc + part;
+    }, "");
+
     return (
         <Detail
             navigationTitle={`Jotoba ・${reading || kanaReading}`}
-            markdown={`# ${title}\n${parsedSenses}`}
+            markdown={`# ${title}\n${pitch && parsedPitch || ""}\n${parsedSenses}`}
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>
-                        <OpenInJotoba word={reading}/>
+                        <OpenInJotoba word={reading} />
                     </ActionPanel.Section>
                 </ActionPanel>
             }
@@ -92,8 +100,8 @@ function WordDetailsView({wordResult}: { wordResult: WordResult }) {
     );
 }
 
-function WordListItem({wordResult}: { wordResult: WordResult }) {
-    const {reading, kanaReading, senses, url} = wordResult;
+function WordListItem({ wordResult }: { wordResult: WordResult }) {
+    const { reading, kanaReading, senses, url } = wordResult;
     return (
         <List.Item
             title={reading}
@@ -118,11 +126,11 @@ function WordListItem({wordResult}: { wordResult: WordResult }) {
                     <ActionPanel.Section>
                         <PushAction
                             title={"See more..."}
-                            target={<WordDetailsView wordResult={wordResult}/>}
+                            target={<WordDetailsView wordResult={wordResult} />}
                         />
                     </ActionPanel.Section>
                     <ActionPanel.Section>
-                        <OpenInJotoba word={reading}/>
+                        <OpenInJotoba word={reading} />
                     </ActionPanel.Section>
                 </ActionPanel>
             }
@@ -130,8 +138,8 @@ function WordListItem({wordResult}: { wordResult: WordResult }) {
     );
 }
 
-function KanjiListItem({kanjiResult}: { kanjiResult: KanjiResult }) {
-    const {literal, stroke_count, grade, jlpt, onYomi, kunYomi, url} =
+function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
+    const { literal, stroke_count, grade, jlpt, onYomi, kunYomi, url } =
         kanjiResult;
     return (
         <List.Item
@@ -154,7 +162,7 @@ function KanjiListItem({kanjiResult}: { kanjiResult: KanjiResult }) {
 
 function useSearch() {
     const [state, setState] = useState<SearchState>({
-        results: {parsedWords: [], parsedKanji: []},
+        results: { parsedWords: [], parsedKanji: [] },
         isLoading: true,
     });
     const cancelRef = useRef<AbortController | null>(null);
@@ -232,7 +240,7 @@ async function performSearch(
     const kanji = (json?.kanji as Json[]) ?? [];
 
     const parsedWords = words.map(word => {
-        const {reading: readings, senses, common} = word;
+        const { reading: readings, senses, common, pitch } = word;
         const reading = readings.kanji || readings.kana;
         const kanaReading = readings.kana;
         const url = `https://jotoba.de/search/${reading}`;
@@ -242,12 +250,13 @@ async function performSearch(
             kanaReading,
             senses,
             common,
+            pitch,
             url,
         };
     });
 
     const parsedKanji = kanji.map(kan => {
-        const {literal, grade, stroke_count, jlpt, onyomi, kunyomi} = kan;
+        const { literal, grade, stroke_count, jlpt, onyomi, kunyomi } = kan;
 
         return {
             id: randomId(),
@@ -261,7 +270,7 @@ async function performSearch(
         };
     });
 
-    return {parsedWords, parsedKanji};
+    return { parsedWords, parsedKanji };
 }
 
 interface SearchState {
@@ -280,6 +289,7 @@ interface WordResult {
     kanaReading: string;
     senses: [];
     common: boolean;
+    pitch?: [];
     url: string;
 }
 
