@@ -16,6 +16,8 @@ import { useState, useEffect, useRef } from "react";
 import fetch, { AbortError } from "node-fetch";
 
 import { parsePos, parseReadings } from "./JotobaUtils";
+import WordListItem from "./components/ListItems/WordListItem";
+import KanjiListItem from "./components/ListItems/KanjiListItem";
 
 export default function Command() {
     const { state, search } = useSearch();
@@ -47,116 +49,6 @@ export default function Command() {
                 ))}
             </List.Section>
         </List>
-    );
-}
-
-function OpenInJotoba({ word }: { word: string }) {
-    return (
-        <OpenInBrowserAction
-            title="Open on Jotoba.de"
-            url={`https://jotoba.de/search/${word}`}
-        />
-    );
-}
-
-function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
-    const { reading, kanaReading, common, senses, pitch, url } = wordResult;
-    const { pop } = useNavigation();
-    const title = `${
-        reading !== kanaReading
-            ? reading + "【" + kanaReading + "】"
-            : kanaReading
-    }`;
-    const parsedSenses = senses
-        .map((sense: { pos: Json[]; glosses: Json[] }) => {
-            const posName = sense.pos.map((p: Json) => parsePos(p));
-            const glossesList = sense.glosses
-                .map(gloss => `- ${gloss}`)
-                .join(`\n`);
-
-            return `### ${posName.join(", ")}\n${glossesList}`;
-        })
-        .join(`\n`);
-    const parsedPitch = pitch?.reduce((acc, curr, index) => {
-        const { part, high } = curr;
-
-        if (high) return acc + `↗${part}↘`;
-
-        return acc + part;
-    }, "");
-
-    return (
-        <Detail
-            navigationTitle={`Jotoba ・${reading || kanaReading}`}
-            markdown={`# ${title}\n${pitch && parsedPitch || ""}\n${parsedSenses}`}
-            actions={
-                <ActionPanel>
-                    <ActionPanel.Section>
-                        <OpenInJotoba word={reading} />
-                    </ActionPanel.Section>
-                </ActionPanel>
-            }
-        />
-    );
-}
-
-function WordListItem({ wordResult }: { wordResult: WordResult }) {
-    const { reading, kanaReading, senses, url } = wordResult;
-    return (
-        <List.Item
-            title={reading}
-            subtitle={kanaReading}
-            accessoryTitle={senses
-                .map(
-                    (sense: { pos: Json[]; glosses: Json[] }) =>
-                        sense.pos.map((p: Json) => parsePos(p)) +
-                        " " +
-                        sense.glosses.join("; ")
-                )
-                .join(" | ")}
-            icon={
-                (wordResult.common && {
-                    source: Icon.Dot,
-                    tintColor: Color.Green,
-                }) ||
-                undefined
-            }
-            actions={
-                <ActionPanel>
-                    <ActionPanel.Section>
-                        <PushAction
-                            title={"See more..."}
-                            target={<WordDetailsView wordResult={wordResult} />}
-                        />
-                    </ActionPanel.Section>
-                    <ActionPanel.Section>
-                        <OpenInJotoba word={reading} />
-                    </ActionPanel.Section>
-                </ActionPanel>
-            }
-        />
-    );
-}
-
-function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
-    const { literal, stroke_count, grade, jlpt, onYomi, kunYomi, url } =
-        kanjiResult;
-    return (
-        <List.Item
-            title={literal}
-            subtitle={`【音読み】: ${onYomi}【訓読み】: ${kunYomi}`}
-            accessoryTitle={`🖌${stroke_count}・JLPT N${jlpt}・🎓${grade}`}
-            actions={
-                <ActionPanel>
-                    <ActionPanel.Section>
-                        <OpenInBrowserAction
-                            title="Open in Browser"
-                            url={url}
-                        />
-                    </ActionPanel.Section>
-                </ActionPanel>
-            }
-        />
     );
 }
 
@@ -232,8 +124,6 @@ async function performSearch(
         return Promise.reject(response.statusText);
     }
 
-    // type Json = Record<string, unknown>;
-
     const json = (await response.json()) as Json;
 
     const words = (json?.words as Json[]) ?? [];
@@ -272,43 +162,3 @@ async function performSearch(
 
     return { parsedWords, parsedKanji };
 }
-
-interface SearchState {
-    results: SearchResult;
-    isLoading: boolean;
-}
-
-interface SearchResult {
-    parsedWords: WordResult[];
-    parsedKanji: KanjiResult[];
-}
-
-interface WordResult {
-    id: string;
-    reading: string;
-    kanaReading: string;
-    senses: [];
-    common: boolean;
-    pitch?: [];
-    url: string;
-}
-
-interface KanjiResult {
-    id: string;
-    literal: string;
-    onYomi: string;
-    kunYomi: string;
-    stroke_count: string;
-    jlpt: string;
-    grade: string;
-    url: string;
-}
-
-type Json =
-    | string
-    | number
-    | boolean
-    | null
-    | { [x: string]: Json }
-    | Array<Json>
-    | Partial<Record<string, Json>>;
