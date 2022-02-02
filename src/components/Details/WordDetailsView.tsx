@@ -1,8 +1,19 @@
 import { ActionPanel, Detail, useNavigation } from "@raycast/api";
 import { parsePos } from "../../JotobaUtils";
 import OpenInJotoba from "../../actions/OpenInJotoba";
+import { SetStateAction, useEffect, useState } from "react";
+import useJotoba from "../../useJotoba";
 
 function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
+    const [sentences, setSentences] = useState([]);
+    const {
+        jotobaIsLoading: jotoSentencesIsLoading,
+        jotobaHasError: jotoSentencesHasError,
+        getJotobaResults: getJotobaSentences,
+    } = useJotoba("sentences");
+
+    const [exampleSentences, setExampleSentences] = useState(null);
+
     const { reading, kanaReading, common, senses, pitch, url } = wordResult;
     const { pop } = useNavigation();
     const title = `${
@@ -28,12 +39,46 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
         return acc + part;
     }, "");
 
+    useEffect(() => {
+        getJotobaSentences(
+            reading || kanaReading,
+            (resultSentences: {
+                sentences: {
+                    map: (arg0: (sentence: Json[]) => string) => {
+                        join: {
+                            (arg0: string): SetStateAction<never[]>;
+                        };
+                    };
+                };
+            }) =>
+                setSentences(
+                    resultSentences.sentences
+                        .map(
+                            sentence =>
+                                `- ${sentence.content}\n${sentence.translation}`
+                        )
+                        .join("\n")
+                )
+        );
+    }, [setSentences]);
+
+    useEffect(() => {
+        console.log(JSON.stringify(sentences));
+    }, [sentences]);
+
     return (
         <Detail
             navigationTitle={`Jotoba ・${reading || kanaReading}`}
-            markdown={`# ${title}\n${
-                (pitch && parsedPitch) || ""
-            }\n${parsedSenses}`}
+            markdown={`# ${title}
+            \n${parsedPitch || ""}
+            \n${parsedSenses}
+            \n${
+                (sentences.length > 0 &&
+                    `## Example Sentences
+                \n${sentences}`) ||
+                ""
+            }
+            `}
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>
