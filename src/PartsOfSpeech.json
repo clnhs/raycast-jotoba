@@ -1,0 +1,318 @@
+{
+  "simple": {
+    "Adverb": {
+      "long": "Adverb",
+      "short": "Adv."
+    },
+    "Auxilary": {
+      "long": "Auxiliary",
+      "short": "Aux."
+    },
+    "Conjungation": {
+      "long": "Conjunction",
+      "short": "conj."
+    },
+    "Noun": {
+      "long": "Noun",
+      "short": "N."
+    },
+    "Prefix": {
+      "long": "Prefix",
+      "short": "Pref."
+    },
+    "Suffix": {
+      "long": "Suffix",
+      "short": "Suf."
+    },
+    "Particle": {
+      "long": "Particle",
+      "short": "Part."
+    },
+    "Sfx": {
+      "long": "Sound effect",
+      "short": "Sfx."
+    },
+    "Verb": {
+      "long": "Verb",
+      "short": "V."
+    },
+    "Adjective": {
+      "long": "Adjective",
+      "short": "Adj."
+    },
+    "Counter": {
+      "long": "Counter",
+      "short": "Count."
+    },
+    "Expr": {
+      "long": "Expression",
+      "short": "Expr."
+    },
+    "Interjection": {
+      "long": "Interjection",
+      "short": "Interj."
+    },
+    "Pronoun": {
+      "long": "Pronoun",
+      "short": "Pron."
+    },
+    "Numeric": {
+      "long": "Numeric",
+      "short": "Num."
+    },
+    "Unclassified": {
+      "long": "Unclassified",
+      "short": "Uncl."
+    },
+    "Intransitive": {
+      "long": "Intransitive",
+      "short": "Intrans."
+    },
+    "Transitive": {
+      "long": "Transitive",
+      "short": "Trans."
+    }
+  },
+  "detailed": {
+    "Noun": {
+      "Normal": {
+        "long": "Noun",
+        "short": "N."
+      },
+      "Adverbial": {
+        "long": "Noun adverbial",
+        "short": "Noun adv."
+      },
+      "Prefix": {
+        "long": "Prefix (noun)",
+        "short": "Pref. (n.)"
+      },
+      "Suffix": {
+        "long": "Suffix (noun)",
+        "short": "Suff. (n.)"
+      },
+      "Temporal": {
+        "long": "Temporal noun",
+        "short": "Temporal n."
+      }
+    },
+    "Adjective": {
+      "PreNounVerb": {
+        "long": "Noun or verb describing a noun",
+        "short": "Noun/verb desc. noun"
+      },
+      "Keiyoushi": {
+        "long": "I adjective",
+        "short": "I adj.",
+        "kana": {
+          "long": "い adjective",
+          "short": "い adj."
+        }
+      },
+      "KeiyoushiYoiIi": {
+        "long": "I adjective (conjugated like いい)",
+        "short": "I adj. (conj. like いい)",
+        "kana": {
+          "long": "い adjective (conjugated like いい)",
+          "short": "い adj. (conj. like いい)"
+        }
+      },
+      "Ku": {
+        "long": "Ku adjective",
+        "short": "Ku adj.",
+        "kana": {
+          "long": "く adjective",
+          "short": "く adj."
+        }
+      },
+      "Na": {
+        "long": "Na adjective",
+        "short": "Na adj.",
+        "kana": {
+          "long": "な adjective",
+          "short": "な adj."
+        }
+      },
+      "Nari": {
+        "long": "Formal form of na adjective",
+        "short": "Formal na adj.",
+        "kana": {
+          "long": "Formal form of な adjective",
+          "short": "Formal な adj."
+        }
+      },
+      "No": {
+        "long": "No adjective",
+        "short": "No adj.",
+        "kana": {
+          "long": "の adjective",
+          "short": "の adj."
+        }
+      },
+      "PreNoun": {
+        "long": "Pre noun adjective",
+        "short": "Pre noun adj."
+      },
+      "Shiku": {
+        "long": "Shiku adjective",
+        "short": "Shiku adj.",
+        "kana": {
+          "long": "しく adjective",
+          "short": "しく adj."
+        }
+      },
+      "Taru": {
+        "long": "Taru adjective",
+        "short": "Taru adj.",
+        "kana": {
+          "long": "たる adjective",
+          "short": "たる adj."
+        }
+      }
+    },
+    "Verb": {
+      "Unspecified": {
+        "long": "Unspecified verb",
+        "short": "Unspec. verb"
+      },
+      "Intransitive": {
+        "long": "Intransitive verb",
+        "short": "Intrans. verb"
+      },
+      "Transitive": {
+        "long": "Transitive verb",
+        "short": "Trans. verb"
+      },
+      "Ichidan": {
+        "long": "Ichidan verb",
+        "short": "Ichidan v.",
+        "kana": {
+          "long": "一段 verb",
+          "short": "一段 v."
+        }
+      },
+      "IchidanZuru": {
+        "long": "Ichidan zuru verb",
+        "short": "Ichidan zuru v.",
+        "kana": {
+          "long": "一段　ずる verb",
+          "short": "一段　ずる v."
+        }
+      },
+      "IchidanKureru": {
+        "long": "Ichidan kureru verb",
+        "short": "Ichidan kureru v.",
+        "kana": {
+          "long": "一段　くれる verb",
+          "short": "一段　くれる v."
+        }
+      },
+      "Kuru": {
+        "long": "Kuru verb",
+        "short": "Kuru v.",
+        "kana": {
+          "long": "くる verb",
+          "short": "くる v."
+        }
+      },
+      "Godan": {
+        "long": "Godan verb",
+        "short": "Godan v.",
+        "types": {
+          "Bu": "bu",
+          "Gu": "gu",
+          "Ku": "ku",
+          "Mu": "mu",
+          "Nu": "nu",
+          "Ru": "ru",
+          "Su": "su",
+          "Tsu": "tsu",
+          "U": "u",
+          "Aru": "aru",
+          "USpecial": "special u",
+          "Uru": "uru",
+          "RuIrreg": "irregular ru",
+          "IkuYuku": "like Iku/Yuku"
+        },
+        "kana": {
+          "long": "五段 verb",
+          "short": "五段 v.",
+          "types": {
+            "Bu": "ぶ",
+            "Gu": "ぐ",
+            "Ku": "く",
+            "Mu": "む",
+            "Nu": "ぬ",
+            "Ru": "る",
+            "Su": "す",
+            "Tsu": "つ",
+            "U": "う",
+            "Aru": "ある",
+            "USpecial": "special う",
+            "Uru": "うる",
+            "RuIrreg": "irregular る",
+            "IkuYuku": "like いく/ゆく"
+          }
+        }
+      },
+      "_": {
+        "long": "Godan verb",
+        "short": "Godan v.",
+        "kana": {
+          "long": "五段 verb",
+          "short": "五段 v."
+        }
+      }
+    },
+    "IrregularVerb": {
+      "Nu": {
+        "long": "Nu verb",
+        "short": "Nu v.",
+        "kana": {
+          "long": "ぬ verb",
+          "short": "ぬ v."
+        }
+      },
+      "Ru": {
+        "long": "Ru verb",
+        "short": "Ru v.",
+        "kana": {
+          "long": "る verb",
+          "short": "る v."
+        }
+      },
+      "NounOrAuxSuru": {
+        "long": "Noun taking suru",
+        "short": "Suru n.",
+        "kana": {
+          "long": "Noun taking する",
+          "short": "する n."
+        }
+      },
+      "Suru": {
+        "long": "Suru verb",
+        "short": "Suru v.",
+        "kana": {
+          "long": "する verb",
+          "short": "する v."
+        }
+      },
+      "SuruSpecial": {
+        "long": "Suru special",
+        "short": "Suru sp.",
+        "kana": {
+          "long": "する special",
+          "short": "する sp."
+        }
+      },
+      "Su": {
+        "long": "Su verb",
+        "short": "Su v.",
+        "kana": {
+          "long": "す verb",
+          "short": "す v."
+        }
+      }
+    }
+  }
+}

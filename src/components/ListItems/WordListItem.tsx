@@ -5,18 +5,25 @@ import { parsePos } from "../../JotobaUtils";
 
 function WordListItem({ wordResult }: { wordResult: WordResult }) {
     const { reading, kanaReading, senses, url } = wordResult;
+
+    const accessoryTitle = (): Array<string> => {
+        const accessoryTitle: Array<string> = senses.map(
+            (sense: { pos: Json[]; glosses: Json[] }) => {
+                return (
+                    sense.pos.map((p: Json) => `【${parsePos(p)}】`) +
+                    sense.glosses.join("; ")
+                );
+            }
+        );
+
+        return accessoryTitle;
+    };
+
     return (
         <List.Item
             title={reading}
             subtitle={kanaReading}
-            accessoryTitle={senses
-                .map(
-                    (sense: { pos: Json[]; glosses: Json[] }) =>
-                        sense.pos.map((p: Json) => parsePos(p)) +
-                        " " +
-                        sense.glosses.join("; ")
-                )
-                .join(" | ")}
+            accessoryTitle={accessoryTitle().join("")}
             icon={
                 (wordResult.common && {
                     source: Icon.Dot,

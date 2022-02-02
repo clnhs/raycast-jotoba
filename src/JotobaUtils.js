@@ -6,7 +6,28 @@ export const parseReadings = readings => {
         .join(", ");
 };
 
-export const parsePos = part => {
+import * as posData from "./PartsOfSpeech.json";
+
+export const parsePos = (pos, short = false, kana = false, lang = "en") => {
+    let posStr = "missing";
+    let posMatch = null;
+    if (typeof pos === "object") {
+        const mainPart = Object.keys(pos)[0];
+        const subPart = Object.values(pos)[0];
+        if (subPart) posMatch = posData.detailed[mainPart][subPart];
+        else posMatch = posData.detailed[mainPart];
+    } //string
+    else posMatch = posData.simple[pos];
+
+    if (posMatch) {
+        if (short) posStr = posMatch.short;
+        else posStr = posMatch.long;
+    }
+
+    return posStr;
+};
+
+export const parsePos_old = part => {
     const partsOfSpeech = [];
 
     if (typeof part === "string") {
@@ -29,7 +50,7 @@ export const parsePos = part => {
         if (part.Adjective === "PreNounVerb")
             partsOfSpeech.push(`Pre-noun/verb adj.`);
         else if (part.Adjective === "Keiyoushi")
-            partsOfSpeech.push(`I-adj. 【Keiyoushi】`)
+            partsOfSpeech.push(`I-adj. 【Keiyoushi】`);
         else partsOfSpeech.push(`${part.Adjective} adj.`);
     else partsOfSpeech.push(JSON.stringify(part.Verb));
 

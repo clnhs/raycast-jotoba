@@ -8,7 +8,7 @@ function KanjiDetailsView({ kanjiResult }: { kanjiResult: KanjiResult }) {
     return (
         <Detail
             navigationTitle={`Jotoba ・${literal}`}
-            markdown={`# ${literal}\n - ${stroke_count} strokes\n - JLPT N${jlpt}\n - Grade ${grade}\n## 【音読み】\n${onYomi}\n## 【訓読み】\n${kunYomi}`}
+            markdown={`# ${literal}\n - ${stroke_count} strokes\n - JLPT N${jlpt}\n - Grade ${grade}\n## 【on-yomi】\n${onYomi}\n## 【kun-yomi】\n${kunYomi}`}
             children={<Detail markdown={`# Henlo`} />}
             actions={
                 <ActionPanel>

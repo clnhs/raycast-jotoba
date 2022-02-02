@@ -38,5 +38,4 @@ type Json =
     | Array<Json>
     | Partial<Record<string, Json>>;
 
-
 export as namespace raycastJotoba;

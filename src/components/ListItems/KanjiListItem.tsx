@@ -10,11 +10,29 @@ import KanjiDetailsView from "../Details/KanjiDetailsView";
 function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
     const { literal, stroke_count, grade, jlpt, onYomi, kunYomi, url } =
         kanjiResult;
+
+    const subtitle = (): Array<string> => {
+        const subtitle: Array<string> = [];
+        if (onYomi.length) subtitle.push(`【on】: ${onYomi}`)
+        if (kunYomi.length) subtitle.push(`【kun】: ${kunYomi}`)
+        return subtitle;
+    };
+
+    const accessoryTitle = (): Array<string> => {
+        const accessoryTitle: Array<string> = [];
+
+        if (stroke_count) accessoryTitle.push(`🖌${stroke_count}`);
+        if (jlpt) accessoryTitle.push(`JLPT N${jlpt}`);
+        if (grade) accessoryTitle.push(`🎓${grade}`);
+
+        return accessoryTitle;
+    };
+
     return (
         <List.Item
             title={literal}
-            subtitle={`【音読み】: ${onYomi}【訓読み】: ${kunYomi}`}
-            accessoryTitle={`🖌${stroke_count}・JLPT N${jlpt}・🎓${grade}`}
+            subtitle={subtitle().join("")}
+            accessoryTitle={accessoryTitle().join("・")}
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>

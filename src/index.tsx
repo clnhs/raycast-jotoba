@@ -133,7 +133,7 @@ async function performSearch(
         const { reading: readings, senses, common, pitch } = word;
         const reading = readings.kanji || readings.kana;
         const kanaReading = readings.kana;
-        const url = encodeURI(`https://jotoba.de/search/${reading}`);
+
         return {
             id: randomId(),
             reading,
@@ -141,7 +141,7 @@ async function performSearch(
             senses,
             common,
             pitch,
-            url,
+            url: encodeURI(`https://jotoba.de/search/${reading}`),
         };
     });
 
@@ -156,7 +156,7 @@ async function performSearch(
             stroke_count,
             jlpt,
             grade,
-            url: `https://jotoba.de/search/${literal}`,
+            url: encodeURI(`https://jotoba.de/search/${literal}`),
         };
     });
 
