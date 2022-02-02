@@ -1,10 +1,22 @@
 import React from "react";
 import useFetch from "./useFetch";
 
-const useJotoba = () => {
-    const [isLoading, hasError, sendRq] = useFetch(
-        "https://jotoba.de/api/search/words"
-    );
+const useJotoba = (api = "words") => {
+    let baseUrl = "";
+    switch (api) {
+        case "words":
+        case "kanji":
+        case "sentences":
+        case "names":
+            baseUrl = `https://jotoba.de/api/search/${api}`;
+            break;
+        case "by_radical":
+            baseUrl = `https://jotoba.de/api/kanji/by_radical`;
+            break;
+        default:
+            throw new Error(`Jotoba API ${api} doesn't exist.`);
+    }
+    const [isLoading, hasError, sendRq] = useFetch(baseUrl);
 
     const getJotobaResults = (query, callback) => {
         return sendRq(
@@ -17,11 +29,10 @@ const useJotoba = () => {
                 },
             },
             results => {
-                if (
-                    results.kanji.length > 0 ||
-                    results.words.length > 0
-                )
-                    callback(results);
+                if (api === "words") {
+                    if (results.kanji.length > 0 || results.words.length > 0)
+                        callback(results);
+                } else if (Object.entries(results).length > 0) callback(results);
                 else callback(null);
             }
         );
