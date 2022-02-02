@@ -255,62 +255,66 @@
           }
         }
       },
+      "Irregular": {
+        "long": "Irregular",
+        "short": "Irreg.",
+        "types": {
+          "Nu": {
+            "long": "Nu verb",
+            "short": "Nu v.",
+            "kana": {
+              "long": "ぬ verb",
+              "short": "ぬ v."
+            }
+          },
+          "Ru": {
+            "long": "Ru verb",
+            "short": "Ru v.",
+            "kana": {
+              "long": "る verb",
+              "short": "る v."
+            }
+          },
+          "NounOrAuxSuru": {
+            "long": "Noun taking suru",
+            "short": "Suru n.",
+            "kana": {
+              "long": "Noun taking する",
+              "short": "する n."
+            }
+          },
+          "Suru": {
+            "long": "Suru verb",
+            "short": "Suru v.",
+            "kana": {
+              "long": "する verb",
+              "short": "する v."
+            }
+          },
+          "SuruSpecial": {
+            "long": "Suru special",
+            "short": "Suru sp.",
+            "kana": {
+              "long": "する special",
+              "short": "する sp."
+            }
+          },
+          "Su": {
+            "long": "Su verb",
+            "short": "Su v.",
+            "kana": {
+              "long": "す verb",
+              "short": "す v."
+            }
+          }
+        }
+      },
       "_": {
         "long": "Godan verb",
         "short": "Godan v.",
         "kana": {
           "long": "五段 verb",
           "short": "五段 v."
-        }
-      }
-    },
-    "IrregularVerb": {
-      "Nu": {
-        "long": "Nu verb",
-        "short": "Nu v.",
-        "kana": {
-          "long": "ぬ verb",
-          "short": "ぬ v."
-        }
-      },
-      "Ru": {
-        "long": "Ru verb",
-        "short": "Ru v.",
-        "kana": {
-          "long": "る verb",
-          "short": "る v."
-        }
-      },
-      "NounOrAuxSuru": {
-        "long": "Noun taking suru",
-        "short": "Suru n.",
-        "kana": {
-          "long": "Noun taking する",
-          "short": "する n."
-        }
-      },
-      "Suru": {
-        "long": "Suru verb",
-        "short": "Suru v.",
-        "kana": {
-          "long": "する verb",
-          "short": "する v."
-        }
-      },
-      "SuruSpecial": {
-        "long": "Suru special",
-        "short": "Suru sp.",
-        "kana": {
-          "long": "する special",
-          "short": "する sp."
-        }
-      },
-      "Su": {
-        "long": "Su verb",
-        "short": "Su v.",
-        "kana": {
-          "long": "す verb",
-          "short": "す v."
         }
       }
     }
