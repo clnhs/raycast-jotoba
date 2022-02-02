@@ -15,7 +15,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import fetch, { AbortError } from "node-fetch";
 
-import { parsePos, parseReadings } from "./JotobaUtils";
+import { parseReadings } from "./JotobaUtils";
 import WordListItem from "./components/ListItems/WordListItem";
 import KanjiListItem from "./components/ListItems/KanjiListItem";
 
