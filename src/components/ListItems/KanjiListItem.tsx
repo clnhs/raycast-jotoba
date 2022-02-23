@@ -6,15 +6,16 @@ import {
 } from "@raycast/api";
 import OpenInJotoba from "../../actions/OpenInJotoba";
 import KanjiDetailsView from "../Details/KanjiDetailsView";
+import { parseReadings } from "../../JotobaUtils";
 
 function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
-    const { literal, stroke_count, grade, jlpt, onYomi, kunYomi, url } =
+    const { literal, stroke_count, grade, jlpt, onyomi, kunyomi } =
         kanjiResult;
 
     const subtitle = (): Array<string> => {
         const subtitle: Array<string> = [];
-        if (onYomi.length) subtitle.push(`【on】: ${onYomi}`)
-        if (kunYomi.length) subtitle.push(`【kun】: ${kunYomi}`)
+        if (onyomi) subtitle.push(`【on】: ${parseReadings(onyomi)}`);
+        if (kunyomi) subtitle.push(`【kun】: ${parseReadings(kunyomi)}`);
         return subtitle;
     };
 

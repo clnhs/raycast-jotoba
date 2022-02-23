@@ -1,28 +1,25 @@
 import { ActionPanel, Detail, useNavigation } from "@raycast/api";
 import { parsePos } from "../../JotobaUtils";
 import OpenInJotoba from "../../actions/OpenInJotoba";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import useJotoba from "../../useJotoba";
 
 function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
     const [sentences, setSentences] = useState([]);
     const {
-        jotobaIsLoading: jotoSentencesIsLoading,
-        jotobaHasError: jotoSentencesHasError,
         getJotobaResults: getJotobaSentences,
     } = useJotoba("sentences");
 
-    const [exampleSentences, setExampleSentences] = useState(null);
+    const { reading, common, senses, pitch } = wordResult;
 
-    const { reading, kanaReading, common, senses, pitch, url } = wordResult;
-    const { pop } = useNavigation();
-    const title = `${
-        reading !== kanaReading
-            ? reading + "【" + kanaReading + "】"
-            : kanaReading
+    const title = `${common ? `🟢&nbsp;` : ""}${
+        reading.kanji && reading.kanji !== reading.kana
+            ? `${reading.kanji}【${reading.kana}】`
+            : reading.kana
     }`;
+
     const parsedSenses = senses
-        .map((sense: { pos: Json[]; glosses: Json[] }) => {
+        .map((sense: { pos: PartOfSpeech[]; glosses: string[] }) => {
             const posName = sense.pos.map((p: Json) => parsePos(p));
             const glossesList = sense.glosses
                 .map(gloss => `- ${gloss}`)
@@ -31,7 +28,8 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
             return `### ${posName.join(", ")}\n${glossesList}`;
         })
         .join(`\n`);
-    const parsedPitch = pitch?.reduce((acc, curr, index) => {
+
+    const parsedPitch = pitch?.reduce((acc, curr) => {
         const { part, high } = curr;
 
         if (high) return acc + `↗${part}↘`;
@@ -41,34 +39,22 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
 
     useEffect(() => {
         getJotobaSentences(
-            reading || kanaReading,
-            (resultSentences: {
-                sentences: {
-                    map: (arg0: (sentence: Json[]) => string) => {
-                        join: {
-                            (arg0: string): SetStateAction<never[]>;
-                        };
-                    };
-                };
-            }) =>
+            reading.kanji || reading.kana,
+            (resultSentences) =>
                 setSentences(
                     resultSentences.sentences
                         .map(
-                            sentence =>
-                                `- ${sentence.content}\n${sentence.translation}`
+                            (sentence: JotobaSentence) =>
+                                `- ${sentence.content}\n${sentence.translation}`,
                         )
-                        .join("\n")
-                )
+                        .join("\n"),
+                ),
         );
     }, [setSentences]);
 
-    useEffect(() => {
-        console.log(JSON.stringify(sentences));
-    }, [sentences]);
-
     return (
         <Detail
-            navigationTitle={`Jotoba ・${reading || kanaReading}`}
+            navigationTitle={`Jotoba ・${reading.kanji || reading.kana}`}
             markdown={`# ${title}
             \n${parsedPitch || ""}
             \n${parsedSenses}
@@ -82,7 +68,7 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>
-                        <OpenInJotoba searchTerm={reading} />
+                        <OpenInJotoba searchTerm={reading.kanji || reading.kana} />
                     </ActionPanel.Section>
                 </ActionPanel>
             }

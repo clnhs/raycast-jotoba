@@ -15,7 +15,6 @@ import {
 import { useState, useEffect, useRef } from "react";
 import fetch, { AbortError } from "node-fetch";
 
-import { parseReadings } from "./JotobaUtils";
 import WordListItem from "./components/ListItems/WordListItem";
 import KanjiListItem from "./components/ListItems/KanjiListItem";
 
@@ -31,17 +30,17 @@ export default function Command() {
         >
             <List.Section
                 title="Words"
-                subtitle={state.results.parsedWords.length + ""}
+                subtitle={state.results.words.length + ""}
             >
-                {state.results.parsedWords.map(wordResult => (
+                {state.results.words.map(wordResult => (
                     <WordListItem key={wordResult.id} wordResult={wordResult} />
                 ))}
             </List.Section>
             <List.Section
                 title="Kanji"
-                subtitle={state.results.parsedKanji.length + ""}
+                subtitle={state.results.kanji.length + ""}
             >
-                {state.results.parsedKanji.map(kanjiResult => (
+                {state.results.kanji.map(kanjiResult => (
                     <KanjiListItem
                         key={kanjiResult.id}
                         kanjiResult={kanjiResult}
@@ -54,7 +53,7 @@ export default function Command() {
 
 function useSearch() {
     const [state, setState] = useState<SearchState>({
-        results: { parsedWords: [], parsedKanji: [] },
+        results: { words: [], kanji: [] },
         isLoading: true,
     });
     const cancelRef = useRef<AbortController | null>(null);
@@ -76,7 +75,7 @@ function useSearch() {
             }));
             const results = await performSearch(
                 searchText,
-                cancelRef.current.signal
+                cancelRef.current.signal,
             );
             setState(oldState => ({
                 ...oldState,
@@ -91,7 +90,7 @@ function useSearch() {
             showToast(
                 ToastStyle.Failure,
                 "Could not perform search",
-                String(error)
+                String(error),
             );
         }
     }
@@ -104,7 +103,7 @@ function useSearch() {
 
 async function performSearch(
     searchText: string,
-    signal: AbortSignal
+    signal: AbortSignal,
 ): Promise<SearchResult> {
     const response = await fetch("https://jotoba.de/api/search/words", {
         method: "POST",
@@ -124,41 +123,24 @@ async function performSearch(
         return Promise.reject(response.statusText);
     }
 
-    const json = (await response.json()) as Json;
+    const responseJSON = (await response.json()) as Json;
 
-    const words = (json?.words as Json[]) ?? [];
-    const kanji = (json?.kanji as Json[]) ?? [];
+    const words = (responseJSON?.words as JotobaWord[]) ?? [];
+    const kanji = (responseJSON?.kanji as JotobaKanji[]) ?? [];
 
-    const parsedWords = words.map(word => {
-        const { reading: readings, senses, common, pitch } = word;
-        const reading = readings.kanji || readings.kana;
-        const kanaReading = readings.kana;
-
+    const wordsWithId = words.map(wordEntry => {
         return {
             id: randomId(),
-            reading,
-            kanaReading,
-            senses,
-            common,
-            pitch,
-            url: encodeURI(`https://jotoba.de/search/${reading}`),
+            ...wordEntry,
         };
     });
 
-    const parsedKanji = kanji.map(kan => {
-        const { literal, grade, stroke_count, jlpt, onyomi, kunyomi } = kan;
-
+    const kanjiWithId = kanji.map(kanjiEntry => {
         return {
             id: randomId(),
-            literal,
-            onYomi: parseReadings(onyomi),
-            kunYomi: parseReadings(kunyomi),
-            stroke_count,
-            jlpt,
-            grade,
-            url: encodeURI(`https://jotoba.de/search/${literal}`),
+            ...kanjiEntry,
         };
     });
 
-    return { parsedWords, parsedKanji };
+    return { words: wordsWithId, kanji: kanjiWithId };
 }

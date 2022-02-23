@@ -18,7 +18,7 @@ const useJotoba = (api = "words") => {
     }
     const [isLoading, hasError, sendRq] = useFetch(baseUrl);
 
-    const getJotobaResults = (query, callback) => {
+    const getJotobaResults = (query: string, callback: (...args: any) => void) => {
         return sendRq(
             {
                 method: "POST",
@@ -28,13 +28,14 @@ const useJotoba = (api = "words") => {
                     language: "English",
                 },
             },
-            results => {
-                if (api === "words") {
-                    if (results.kanji.length > 0 || results.words.length > 0)
-                        callback(results);
-                } else if (Object.entries(results).length > 0) callback(results);
-                else callback(null);
-            }
+            (results: JotobaResults) => {
+                if (results) {
+                    if (api === "words") {
+                        if (results.kanji.length > 0 || results.words.length > 0)
+                            callback(results);
+                    } else if (Object.entries(results).length > 0) callback(results);
+                } else callback(null);
+            },
         );
     };
 

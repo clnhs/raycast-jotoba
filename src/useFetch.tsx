@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
-import fetch, { AbortError } from "node-fetch";
+import fetch from "node-fetch";
 
-const useFetch = baseUrl => {
-    const [isLoading, setIsLoading] = useState(false);
-    const [hasError, setHasError] = useState(null);
+const useFetch = (baseUrl: string): [isLoading: boolean, hasError: boolean | Error, sendRq: (config: object, callback: (...args: any) => any) => void] => {
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [hasError, setHasError] = useState<Error | boolean>(false);
     const rqUrl = baseUrl;
 
     const sendRq = useCallback(
@@ -11,7 +11,7 @@ const useFetch = baseUrl => {
             try {
                 let res;
                 setIsLoading(true);
-                setHasError(null);
+                setHasError(false);
 
                 if (!config)
                     throw new Error("Not configured.");
@@ -19,36 +19,33 @@ const useFetch = baseUrl => {
                 if (config.method === "GET")
                     res = await fetch(rqUrl);
                 else if (config.method !== "GET") {
-                    console.log(config.bodyData);
                     res = await fetch(rqUrl, {
                         method: config.method,
-                        mode: "cors",
-                        cache: "no-cache",
                         headers: {
                             "Content-Type":
                                 "application/json",
                         },
                         referrerPolicy: "no-referrer",
                         body: JSON.stringify(
-                            config.bodyData
+                            config.bodyData,
                         ),
                     });
                 }
 
-                if (!!res && !res.ok)
+                if (typeof res === "undefined" || !res.ok)
                     throw new Error(
-                        `Fetch failed with ${res.status}: ${res.statusText}`
+                        `Fetch failed.`,
                     );
 
                 callback(await res.json());
             } catch (err) {
-                console.error(err);
-                setHasError(err);
+                if (err instanceof Error)
+                    setHasError(err);
             } finally {
                 setIsLoading(false);
             }
         },
-        []
+        [],
     );
 
     return [isLoading, hasError, sendRq];

@@ -4,16 +4,16 @@ import OpenInJotoba from "../../actions/OpenInJotoba";
 import { parsePos } from "../../JotobaUtils";
 
 function WordListItem({ wordResult }: { wordResult: WordResult }) {
-    const { reading, kanaReading, senses, url } = wordResult;
+    const { id, reading, senses, url } = wordResult;
 
     const accessoryTitle = (): Array<string> => {
         const accessoryTitle: Array<string> = senses.map(
-            (sense: { pos: Json[]; glosses: Json[] }) => {
+            (sense: { pos: PartOfSpeech[]; glosses: string[] }) => {
                 return (
-                    sense.pos.map((p: Json) => `【${parsePos(p)}】`) +
+                    sense.pos.map((p: PartOfSpeech) => `【${parsePos(p)}】`) +
                     sense.glosses.join("; ")
                 );
-            }
+            },
         );
 
         return accessoryTitle;
@@ -21,8 +21,9 @@ function WordListItem({ wordResult }: { wordResult: WordResult }) {
 
     return (
         <List.Item
-            title={reading}
-            subtitle={kanaReading}
+            key={id}
+            title={reading.kanji || reading.kana}
+            subtitle={reading.kana}
             accessoryTitle={accessoryTitle().join("")}
             icon={
                 (wordResult.common && {
@@ -39,9 +40,9 @@ function WordListItem({ wordResult }: { wordResult: WordResult }) {
                             target={<WordDetailsView wordResult={wordResult} />}
                         />
                     </ActionPanel.Section>
-                    <ActionPanel.Section>
-                        <OpenInJotoba searchTerm={reading} />
-                    </ActionPanel.Section>
+                    {(reading.kanji || reading.kana) && <ActionPanel.Section>
+                        <OpenInJotoba searchTerm={reading.kanji || reading.kana} />
+                    </ActionPanel.Section>}
                 </ActionPanel>
             }
         />
