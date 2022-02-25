@@ -15,6 +15,7 @@ import useJotobaAsync from "../../useJotobaAsync";
  * without opening the website.
  */
 function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
+    const { reading, common, senses, pitch } = wordResult;
     const { userLanguage, useEnglishFallback, detailsPosDisplayType } =
         getPreferenceValues<Preferences>();
     const [sentences, setSentences] = useState([]);
@@ -23,8 +24,6 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
 
     const [parsedSenses, setParsedSenses] = useState<string>("");
     const [parsedPitch, setParsedPitch] = useState<string>("");
-
-    const { reading, common, senses, pitch } = wordResult;
 
     const title = `${common ? `🟢&nbsp;` : ""}${
         reading.kanji && reading.kanji !== reading.kana
@@ -68,6 +67,9 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
                     const glossesList = sense.glosses
                         .map(gloss => `- ${gloss}`)
                         .join(`\n`);
+
+                    if (sense.language === userLanguage && !useEnglishFallback)
+                        return `## Definitions\n${glossesList}`;
 
                     return `### ${posName}\n${glossesList}`;
                 })

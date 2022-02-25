@@ -15,7 +15,7 @@
       "mode": "view",
       "preferences": [
         {
-          "name": "preferredLanguage",
+          "name": "userLanguage",
           "type": "dropdown",
           "required": false,
           "title": "Results Language",
