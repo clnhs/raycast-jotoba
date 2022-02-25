@@ -1,6 +1,10 @@
 import { ActionPanel, Detail, getPreferenceValues } from "@raycast/api";
 import OpenInJotoba from "../../actions/OpenInJotoba";
 
+/**
+ * Kanji details view for displaying... more details about a kanji
+ * without opening the website.
+ */
 function KanjiDetailsView({ kanjiResult }: { kanjiResult: KanjiResult }) {
     const { kanjiDetailsTitleDisplayType } = getPreferenceValues<Preferences>();
     const { literal, onyomi, kunyomi, stroke_count, jlpt, grade } = kanjiResult;

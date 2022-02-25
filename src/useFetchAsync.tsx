@@ -1,6 +1,9 @@
 import React, { useCallback, useState } from "react";
 import fetch from "node-fetch";
 
+/**
+ * Is this sort of useless and could be integrated into useJotobaAsync? Yes.
+ */
 const useFetchAsync = (
     baseUrl: string
 ): ((

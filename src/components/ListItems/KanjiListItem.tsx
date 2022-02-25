@@ -3,6 +3,9 @@ import OpenInJotoba from "../../actions/OpenInJotoba";
 import KanjiDetailsView from "../Details/KanjiDetailsView";
 import { parseReadings } from "../../JotobaUtils";
 
+/**
+ * Kanji item for displaying in search results.
+ */
 function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
     const { kanjiDetailsTitleDisplayType } = getPreferenceValues<Preferences>();
     const { literal, stroke_count, grade, jlpt, onyomi, kunyomi } = kanjiResult;

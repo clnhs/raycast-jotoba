@@ -11,6 +11,9 @@ import OpenInJotoba from "../../actions/OpenInJotoba";
 import { parsePos } from "../../JotobaUtils";
 import { useEffect, useState } from "react";
 
+/**
+ * Word item for displaying in search results.
+ */
 function WordListItem({ wordResult }: { wordResult: WordResult }) {
     const { posDisplayType, useEnglishFallback, userLanguage } =
         getPreferenceValues<Preferences>();

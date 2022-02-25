@@ -10,6 +10,10 @@ import OpenInJotoba from "../../actions/OpenInJotoba";
 import { useEffect, useState } from "react";
 import useJotobaAsync from "../../useJotobaAsync";
 
+/**
+ * Word details view for displaying... more details about a word
+ * without opening the website.
+ */
 function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
     const { userLanguage, useEnglishFallback, detailsPosDisplayType } =
         getPreferenceValues<Preferences>();

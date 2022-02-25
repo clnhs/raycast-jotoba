@@ -1,7 +1,10 @@
 import React from "react";
 import useFetchAsync from "./useFetchAsync";
-import { AbortError } from "node-fetch";
 
+/**
+ * Wrapper around the Jotoba API using fetch (well, technically the kinda useless useFetchAsync hook...)
+ * @param {string} api  -  words, kanji, sentences, names or by_radical
+ */
 const useJotobaAsync = (api = "words") => {
     let baseUrl = "";
     switch (api) {

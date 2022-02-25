@@ -8,6 +8,9 @@ import WordListItem from "./components/ListItems/WordListItem";
 import KanjiListItem from "./components/ListItems/KanjiListItem";
 import useJotobaAsync from "./useJotobaAsync";
 
+/**
+ * The main command for Raycast Jotoba
+ */
 export default function Command() {
     const { state, search } = useSearch();
 
@@ -41,6 +44,9 @@ export default function Command() {
     );
 }
 
+/**
+ * Search Hook used on the main command/search view
+ */
 function useSearch() {
     const getJotobaResults = useJotobaAsync();
     const [state, setState] = useState<SearchState>({
@@ -56,7 +62,7 @@ function useSearch() {
         };
     }, []);
 
-    async function search(searchText: string) {
+    const search = async (searchText: string) => {
         const { userLanguage, useEnglishFallback } =
             getPreferenceValues<Preferences>();
         cancelRef.current?.abort();
@@ -93,17 +99,17 @@ function useSearch() {
                 }));
             }
         } catch (error) {
-            if (error instanceof AbortError) {
-                return;
-            }
+            if (error instanceof AbortError) return;
+
             console.error("search error", error);
+
             showToast(
                 Toast.Style.Failure,
                 "Could not perform search",
                 String(error)
             );
         }
-    }
+    };
 
     return {
         state: state,
