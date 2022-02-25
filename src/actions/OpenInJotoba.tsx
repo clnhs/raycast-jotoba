@@ -1,4 +1,4 @@
-import { Action } from "@raycast/api";
+import { Action, environment } from "@raycast/api";
 
 /**
  * The action that allows users to access the viewed/selected
@@ -9,6 +9,7 @@ const OpenInJotoba = ({ searchTerm }: { searchTerm: string }) => {
         <Action.OpenInBrowser
             title="Open on Jotoba.de"
             url={encodeURI(`https://jotoba.de/search/${searchTerm}`)}
+            icon={`${environment.assetsPath}/logos/jotoba_de.png`}
         />
     );
 };
