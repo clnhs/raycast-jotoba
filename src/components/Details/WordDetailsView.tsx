@@ -68,7 +68,11 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
                         .map(gloss => `- ${gloss}`)
                         .join(`\n`);
 
-                    if (sense.language === userLanguage && !useEnglishFallback)
+                    if (
+                        userLanguage !== "English" &&
+                        sense.language === userLanguage &&
+                        !useEnglishFallback
+                    )
                         return `## Definitions\n${glossesList}`;
 
                     return `### ${posName}\n${glossesList}`;
