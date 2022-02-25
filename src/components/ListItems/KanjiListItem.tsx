@@ -1,26 +1,33 @@
-import {
-    ActionPanel,
-    List,
-    OpenInBrowserAction,
-    PushAction,
-} from "@raycast/api";
+import { ActionPanel, List, Action, getPreferenceValues } from "@raycast/api";
 import OpenInJotoba from "../../actions/OpenInJotoba";
 import KanjiDetailsView from "../Details/KanjiDetailsView";
 import { parseReadings } from "../../JotobaUtils";
 
 function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
-    const { literal, stroke_count, grade, jlpt, onyomi, kunyomi } =
-        kanjiResult;
+    const { kanjiDetailsTitleDisplayType } = getPreferenceValues<Preferences>();
+    const { literal, stroke_count, grade, jlpt, onyomi, kunyomi } = kanjiResult;
+    const onTitle =
+        kanjiDetailsTitleDisplayType === "jp"
+            ? "音読み"
+            : kanjiDetailsTitleDisplayType === "kana"
+            ? "オン"
+            : "onyomi";
+    const kunTitle =
+        kanjiDetailsTitleDisplayType === "jp"
+            ? "訓読み"
+            : kanjiDetailsTitleDisplayType === "kana"
+            ? "くん"
+            : "kunyomi";
 
-    const subtitle = (): Array<string> => {
-        const subtitle: Array<string> = [];
-        if (onyomi) subtitle.push(`【on】: ${parseReadings(onyomi)}`);
-        if (kunyomi) subtitle.push(`【kun】: ${parseReadings(kunyomi)}`);
+    const subtitle = (): string[] => {
+        const subtitle: string[] = [];
+        if (onyomi) subtitle.push(`【${onTitle}】: ${parseReadings(onyomi)}`);
+        if (kunyomi) subtitle.push(`【${kunTitle}】: ${parseReadings(kunyomi)}`);
         return subtitle;
     };
 
-    const accessoryTitle = (): Array<string> => {
-        const accessoryTitle: Array<string> = [];
+    const accessoryTitle = (): string[] => {
+        const accessoryTitle: string[] = [];
 
         if (stroke_count) accessoryTitle.push(`🖌${stroke_count}`);
         if (jlpt) accessoryTitle.push(`JLPT N${jlpt}`);
@@ -37,7 +44,7 @@ function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>
-                        <PushAction
+                        <Action.Push
                             title={"See more..."}
                             target={
                                 <KanjiDetailsView kanjiResult={kanjiResult} />

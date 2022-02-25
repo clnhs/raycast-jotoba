@@ -12,11 +12,143 @@
       "title": "Jotoba",
       "subtitle": "Search Jotoba",
       "description": "Search Jotoba.de from the comfort of Raycast.",
-      "mode": "view"
+      "mode": "view",
+      "preferences": [
+        {
+          "name": "preferredLanguage",
+          "type": "dropdown",
+          "required": false,
+          "title": "Results Language",
+          "description": "In which language do you wish to see to see results?",
+          "default": "English",
+          "data": [
+            {
+              "title": "English",
+              "value": "English"
+            },
+            {
+              "title": "German (deutsch)",
+              "value": "German"
+            },
+            {
+              "title": "Spanish (español)",
+              "value": "Spanish"
+            },
+            {
+              "title": "French (français)",
+              "value": "French"
+            },
+            {
+              "title": "Dutch (nederlands)",
+              "value": "Dutch"
+            },
+            {
+              "title": "Swedish (svenska)",
+              "value": "Swedish"
+            },
+            {
+              "title": "Russian (русский язык)",
+              "value": "Russian"
+            },
+            {
+              "title": "Hungarian (magyar nyelv)",
+              "value": "Hungarian"
+            },
+            {
+              "title": "Slovenian (slovenski jezik)",
+              "value": "Slovenian"
+            }
+          ]
+        },
+        {
+          "name": "useEnglishFallback",
+          "type": "checkbox",
+          "required": false,
+          "title": "",
+          "description": "Enable if results insufficient in your selected language.",
+          "default": true,
+          "label": "Keep English search results."
+        },
+        {
+          "name": "posDisplayType",
+          "type": "dropdown",
+          "required": false,
+          "title": "In search results, display parts of speech in...",
+          "description": "Choose a language in which to display parts of speech (e.g. \"Adverb\", \"Noun\", etc...",
+          "default": "short",
+          "data": [
+            {
+              "title": "short form (e.g. \"ku adj.\")",
+              "value": "short"
+            },
+            {
+              "title": "long form (e.g. \"ku adjective\")",
+              "value": "long"
+            },
+            {
+              "title": "kana long form (e.g. \"く adjective\")",
+              "value": "klong"
+            },
+            {
+              "title": "kana short form (e.g. \"く adj.\")",
+              "value": "kshort"
+            }
+          ]
+        },
+        {
+          "name": "detailsPosDisplayType",
+          "type": "dropdown",
+          "required": false,
+          "title": "In definitions, display parts of speech in...",
+          "description": "Choose a language in which to display parts of speech (e.g. \"Adverb\", \"Noun\", etc...",
+          "default": "long",
+          "data": [
+            {
+              "title": "short form (e.g. \"ku adj.\")",
+              "value": "short"
+            },
+            {
+              "title": "long form (e.g. \"ku adjective\")",
+              "value": "long"
+            },
+            {
+              "title": "kana long form (e.g. \"く adjective\")",
+              "value": "klong"
+            },
+            {
+              "title": "kana short form (e.g. \"く adj.\")",
+              "value": "kshort"
+            }
+          ]
+        },
+        {
+          "name": "kanjiDetailsTitleDisplayType",
+          "type": "dropdown",
+          "required": false,
+          "title": "Show \"On\"/\"Kun\" titles in...",
+          "description": "Show \"On\"/\"Kun\" titles as...",
+          "default": "romaji",
+          "data": [
+            {
+              "title": "音読み・訓読み",
+              "value": "jp"
+            },
+            {
+              "title": "オン・くん",
+              "value": "kana"
+            },
+            {
+              "title": "onyomi・kunyomi",
+              "value": "romaji"
+            }
+          ]
+        }
+      ]
     }
   ],
   "dependencies": {
     "@raycast/api": "^1.28.0",
+    "nanoid": "^3.3.1",
     "node-fetch": "^3.2.0",
     "react": "^17.0.2",
     "react-reconciler": "^0.26.2"

@@ -1,22 +1,12 @@
-import {
-    Icon,
-    ActionPanel,
-    CopyToClipboardAction,
-    PushAction,
-    List,
-    Detail,
-    OpenInBrowserAction,
-    showToast,
-    ToastStyle,
-    randomId,
-    useNavigation,
-    Color,
-} from "@raycast/api";
+import { List, showToast, Toast, getPreferenceValues } from "@raycast/api";
+
 import { useState, useEffect, useRef } from "react";
 import fetch, { AbortError } from "node-fetch";
+import { nanoid } from "nanoid";
 
 import WordListItem from "./components/ListItems/WordListItem";
 import KanjiListItem from "./components/ListItems/KanjiListItem";
+import useJotobaAsync from "./useJotobaAsync";
 
 export default function Command() {
     const { state, search } = useSearch();
@@ -52,9 +42,10 @@ export default function Command() {
 }
 
 function useSearch() {
+    const getJotobaResults = useJotobaAsync();
     const [state, setState] = useState<SearchState>({
         results: { words: [], kanji: [] },
-        isLoading: true,
+        isLoading: false,
     });
     const cancelRef = useRef<AbortController | null>(null);
 
@@ -66,31 +57,50 @@ function useSearch() {
     }, []);
 
     async function search(searchText: string) {
+        const { userLanguage, useEnglishFallback } =
+            getPreferenceValues<Preferences>();
         cancelRef.current?.abort();
         cancelRef.current = new AbortController();
+
         try {
-            setState(oldState => ({
-                ...oldState,
-                isLoading: true,
-            }));
-            const results = await performSearch(
-                searchText,
-                cancelRef.current.signal,
-            );
-            setState(oldState => ({
-                ...oldState,
-                results: results,
-                isLoading: false,
-            }));
+            if (searchText.length > 0) {
+                setState(prevState => ({ ...prevState, isLoading: true }));
+
+                const results = (await getJotobaResults({
+                    bodyData: {
+                        query: searchText,
+                        no_english: !useEnglishFallback,
+                        language: userLanguage,
+                    },
+                    signal: cancelRef.current.signal,
+                })) as Json;
+
+                const words = results.words as JotobaWord[];
+                const kanji = results.kanji as JotobaKanji[];
+
+                setState(prevState => ({
+                    isLoading: false,
+                    results: {
+                        words: words.map(wordEntry => ({
+                            id: nanoid(),
+                            ...wordEntry,
+                        })),
+                        kanji: kanji.map(kanjiEntry => ({
+                            id: nanoid(),
+                            ...kanjiEntry,
+                        })),
+                    },
+                }));
+            }
         } catch (error) {
             if (error instanceof AbortError) {
                 return;
             }
             console.error("search error", error);
             showToast(
-                ToastStyle.Failure,
+                Toast.Style.Failure,
                 "Could not perform search",
-                String(error),
+                String(error)
             );
         }
     }
@@ -103,8 +113,11 @@ function useSearch() {
 
 async function performSearch(
     searchText: string,
-    signal: AbortSignal,
+    signal: AbortSignal
 ): Promise<SearchResult> {
+    const { userLanguage, useEnglishFallback } =
+        getPreferenceValues<Preferences>();
+
     const response = await fetch("https://jotoba.de/api/search/words", {
         method: "POST",
         signal: signal,
@@ -114,8 +127,8 @@ async function performSearch(
         referrerPolicy: "no-referrer",
         body: JSON.stringify({
             query: searchText,
-            no_english: false,
-            language: "English",
+            no_english: !useEnglishFallback,
+            language: userLanguage,
         }),
     });
 
@@ -128,19 +141,14 @@ async function performSearch(
     const words = (responseJSON?.words as JotobaWord[]) ?? [];
     const kanji = (responseJSON?.kanji as JotobaKanji[]) ?? [];
 
-    const wordsWithId = words.map(wordEntry => {
-        return {
-            id: randomId(),
+    return {
+        words: words.map(wordEntry => ({
+            id: nanoid(),
             ...wordEntry,
-        };
-    });
-
-    const kanjiWithId = kanji.map(kanjiEntry => {
-        return {
-            id: randomId(),
+        })),
+        kanji: kanji.map(kanjiEntry => ({
+            id: nanoid(),
             ...kanjiEntry,
-        };
-    });
-
-    return { words: wordsWithId, kanji: kanjiWithId };
+        })),
+    };
 }

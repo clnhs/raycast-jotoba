@@ -1,14 +1,25 @@
-import { ActionPanel, Detail, useNavigation } from "@raycast/api";
+import {
+    ActionPanel,
+    Detail,
+    Toast,
+    showToast,
+    getPreferenceValues,
+} from "@raycast/api";
 import { parsePos } from "../../JotobaUtils";
 import OpenInJotoba from "../../actions/OpenInJotoba";
 import { useEffect, useState } from "react";
-import useJotoba from "../../useJotoba";
+import useJotobaAsync from "../../useJotobaAsync";
 
 function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
+    const { userLanguage, useEnglishFallback, detailsPosDisplayType } =
+        getPreferenceValues<Preferences>();
+    const [statusToast, setStatusToast] = useState<Toast>();
     const [sentences, setSentences] = useState([]);
-    const {
-        getJotobaResults: getJotobaSentences,
-    } = useJotoba("sentences");
+
+    const getJotobaResults = useJotobaAsync("sentences");
+
+    const [parsedSenses, setParsedSenses] = useState<string>("");
+    const [parsedPitch, setParsedPitch] = useState<string>("");
 
     const { reading, common, senses, pitch } = wordResult;
 
@@ -18,38 +29,90 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
             : reading.kana
     }`;
 
-    const parsedSenses = senses
-        .map((sense: { pos: PartOfSpeech[]; glosses: string[] }) => {
-            const posName = sense.pos.map((p: Json) => parsePos(p));
-            const glossesList = sense.glosses
-                .map(gloss => `- ${gloss}`)
-                .join(`\n`);
+    useEffect(() => {
+        setParsedSenses(
+            senses
+                .reduce((acc: Sense[], currSense, index) => {
+                    if (currSense.language !== "English") {
+                        const firstNonEnglishIndex = acc.findIndex(
+                            sense => sense.language !== "English"
+                        );
 
-            return `### ${posName.join(", ")}\n${glossesList}`;
-        })
-        .join(`\n`);
+                        if (firstNonEnglishIndex > -1) {
+                            const slicedAcc = [...acc];
+                            const container = slicedAcc.splice(
+                                firstNonEnglishIndex,
+                                1
+                            )[0];
 
-    const parsedPitch = pitch?.reduce((acc, curr) => {
-        const { part, high } = curr;
+                            container.glosses = [
+                                ...container.glosses,
+                                ...currSense.glosses,
+                            ];
+                            return [...slicedAcc, container];
+                        }
+                    }
 
-        if (high) return acc + `↗${part}↘`;
+                    return [...acc, currSense];
+                }, [])
+                .map(sense => {
+                    let posName = sense.pos
+                        .map(p => parsePos(p, detailsPosDisplayType))
+                        .join(" ・ ");
 
-        return acc + part;
-    }, "");
+                    if (posName.length === 0) posName = sense.language;
+
+                    const glossesList = sense.glosses
+                        .map(gloss => `- ${gloss}`)
+                        .join(`\n`);
+
+                    return `### ${posName}\n${glossesList}`;
+                })
+                .join(`\n`)
+        );
+
+        if (pitch)
+            setParsedPitch(
+                pitch.reduce((acc, curr) => {
+                    const { part, high } = curr;
+
+                    if (high) return acc + `↗${part}↘`;
+
+                    return acc + part;
+                }, "")
+            );
+    }, [setParsedPitch, setParsedSenses]);
 
     useEffect(() => {
-        getJotobaSentences(
-            reading.kanji || reading.kana,
-            (resultSentences) =>
-                setSentences(
+        (async () => {
+            try {
+                const resultSentences = (await getJotobaResults({
+                    bodyData: {
+                        query: reading.kanji || reading.kana,
+                        no_english: !useEnglishFallback,
+                        language: userLanguage,
+                    },
+                })) as Json;
+
+                if (!resultSentences) throw new Error("No sentences found.");
+
+                setSentences(prevState =>
                     resultSentences.sentences
                         .map(
                             (sentence: JotobaSentence) =>
-                                `- ${sentence.content}\n${sentence.translation}`,
+                                `- ${sentence.content} → ${sentence.translation}`
                         )
-                        .join("\n"),
-                ),
-        );
+                        .join("\n")
+                );
+            } catch (err) {
+                console.error(err);
+                void showToast(
+                    Toast.Style.Failure,
+                    "Could not fetch example sentences.",
+                    String(err)
+                );
+            }
+        })();
     }, [setSentences]);
 
     return (
@@ -57,7 +120,7 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
             navigationTitle={`Jotoba ・${reading.kanji || reading.kana}`}
             markdown={`# ${title}
             \n${parsedPitch || ""}
-            \n${parsedSenses}
+            \n${parsedSenses || ""}
             \n${
                 (sentences.length > 0 &&
                     `## Example Sentences
@@ -68,7 +131,9 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>
-                        <OpenInJotoba searchTerm={reading.kanji || reading.kana} />
+                        <OpenInJotoba
+                            searchTerm={reading.kanji || reading.kana}
+                        />
                     </ActionPanel.Section>
                 </ActionPanel>
             }

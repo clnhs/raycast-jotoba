@@ -17,31 +17,36 @@ interface KanjiResult extends JotobaKanji {
 }
 
 interface PartOfSpeech {
-    [groupName: string]: string | {
-        [typeName: string]: string
-    };
+    [groupName: string]:
+        | string
+        | {
+              [typeName: string]: string;
+          };
 
+    language: string;
+}
+
+interface Sense {
+    glosses: string[];
+    pos: PartOfSpeech[];
     language: string;
 }
 
 interface JotobaWord {
     reading: {
-        kana: string, // kana reading is always available
-        kanji?: string,
-        furigana?: string,
+        kana: string; // kana reading is always available
+        kanji?: string;
+        furigana?: string;
     };
     common: boolean;
-    senses: [
+    senses: Sense[];
+    audio?: string;
+    pitch?: [
         {
-            glosses: string[];
-            pos: PartOfSpeech[];
+            part: string;
+            high: boolean;
         }
     ];
-    audio?: string;
-    pitch?: [{
-        part: string;
-        high: boolean;
-    }];
     url: string;
 }
 
@@ -70,15 +75,38 @@ interface JotobaName {
 }
 
 interface JotobaSentence {
-    content: string,
-    furigana?: string,
-    translation: string,
-    language: string,
+    content: string;
+    furigana?: string;
+    translation: string;
+    language: string;
 }
 
 /** Jotoba API results **/
 interface JotobaResults {
-    [key: string]: JotobaWord[] | JotobaKanji[] | JotobaSentence[] | JotobaName[];
+    [key: string]:
+        | JotobaWord[]
+        | JotobaKanji[]
+        | JotobaSentence[]
+        | JotobaName[];
+}
+
+interface JotobaResultParams {
+    query: string;
+    no_english?: boolean;
+    language?: string;
+}
+interface JotobaBodyData {
+    query: string;
+    no_english: boolean;
+    language: string;
+}
+
+interface Preferences {
+    userLanguage: string;
+    useEnglishFallback: boolean;
+    posDisplayType: string;
+    detailsPosDisplayType: string;
+    kanjiDetailsTitleDisplayType: string;
 }
 
 type Json =

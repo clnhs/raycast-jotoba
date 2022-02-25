@@ -1,30 +1,53 @@
-import { ActionPanel, Color, Icon, List, PushAction } from "@raycast/api";
+import {
+    ActionPanel,
+    Color,
+    Icon,
+    List,
+    Action,
+    getPreferenceValues,
+} from "@raycast/api";
 import WordDetailsView from "../Details/WordDetailsView";
 import OpenInJotoba from "../../actions/OpenInJotoba";
 import { parsePos } from "../../JotobaUtils";
+import { useEffect, useState } from "react";
 
 function WordListItem({ wordResult }: { wordResult: WordResult }) {
-    const { id, reading, senses, url } = wordResult;
+    const { posDisplayType, useEnglishFallback, userLanguage } =
+        getPreferenceValues<Preferences>();
+    const { id, reading, senses } = wordResult;
+    const [accessoryTitle, setAccessoryTitle] = useState<string>();
 
-    const accessoryTitle = (): Array<string> => {
-        const accessoryTitle: Array<string> = senses.map(
-            (sense: { pos: PartOfSpeech[]; glosses: string[] }) => {
-                return (
-                    sense.pos.map((p: PartOfSpeech) => `【${parsePos(p)}】`) +
-                    sense.glosses.join("; ")
-                );
-            },
+    useEffect(() => {
+        setAccessoryTitle(
+            senses
+                .filter(sense => {
+                    if (useEnglishFallback && userLanguage !== "English")
+                        return sense.language === "English";
+
+                    return sense;
+                })
+                .map(sense => {
+                    const parsedPoses = sense.pos.map(p =>
+                        parsePos(p, posDisplayType)
+                    );
+
+                    if (parsedPoses.length === 0)
+                        return " " + sense.glosses.join("; ");
+
+                    return `【${parsedPoses.join("・")}】${sense.glosses.join(
+                        "; "
+                    )}`;
+                })
+                .join("")
         );
-
-        return accessoryTitle;
-    };
+    }, [setAccessoryTitle]);
 
     return (
         <List.Item
             key={id}
             title={reading.kanji || reading.kana}
             subtitle={reading.kana}
-            accessoryTitle={accessoryTitle().join("")}
+            accessoryTitle={accessoryTitle}
             icon={
                 (wordResult.common && {
                     source: Icon.Dot,
@@ -35,14 +58,18 @@ function WordListItem({ wordResult }: { wordResult: WordResult }) {
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>
-                        <PushAction
+                        <Action.Push
                             title={"See more..."}
                             target={<WordDetailsView wordResult={wordResult} />}
                         />
                     </ActionPanel.Section>
-                    {(reading.kanji || reading.kana) && <ActionPanel.Section>
-                        <OpenInJotoba searchTerm={reading.kanji || reading.kana} />
-                    </ActionPanel.Section>}
+                    {(reading.kanji || reading.kana) && (
+                        <ActionPanel.Section>
+                            <OpenInJotoba
+                                searchTerm={reading.kanji || reading.kana}
+                            />
+                        </ActionPanel.Section>
+                    )}
                 </ActionPanel>
             }
         />

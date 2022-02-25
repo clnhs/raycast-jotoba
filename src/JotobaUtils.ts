@@ -9,7 +9,7 @@ export const parseReadings = (readings: string[]) => {
         .join(", ");
 };
 
-export const parsePos = (unparsedPosData: string[] | PartOfSpeech, short = false, kana = false, lang = "en"): string => {
+export const parsePos = (unparsedPosData: string[] | PartOfSpeech, type?: string): string => {
     const posDataBuffer = fs.readFileSync(`${environment.assetsPath}/PartsOfSpeech.json`);
 
     const {
@@ -46,8 +46,22 @@ export const parsePos = (unparsedPosData: string[] | PartOfSpeech, short = false
         posMatch = simplePosData[unparsedPosData];
 
     if (posMatch) {
-        if (short) posStr = posMatch.short;
-        else posStr = posMatch.long || posMatch;
+        switch (type) {
+            case "long":
+                posStr = posMatch.long;
+                break;
+            case "short":
+                posStr = posMatch.short;
+                break;
+            case "klong":
+                posStr = posMatch.kana?.long || posMatch.long;
+                break;
+            case "kshort":
+                posStr = posMatch.kana?.short || posMatch.short || posMatch.kana?.long || posMatch.long;
+                break;
+            default:
+                posStr = posMatch.long || posMatch;
+        }
     }
 
     return posStr;

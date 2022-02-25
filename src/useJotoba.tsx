@@ -18,14 +18,16 @@ const useJotoba = (api = "words") => {
     }
     const [isLoading, hasError, sendRq] = useFetch(baseUrl);
 
-    const getJotobaResults = (query: string, callback: (...args: any) => void) => {
+    const getJotobaResults = (params: JotobaResultParams = {
+        query: "",
+        no_english: false,
+        language: "English",
+    }, callback: (...args: any) => void) => {
         return sendRq(
             {
                 method: "POST",
                 bodyData: {
-                    query,
-                    no_english: false,
-                    language: "English",
+                    ...params,
                 },
             },
             (results: JotobaResults) => {

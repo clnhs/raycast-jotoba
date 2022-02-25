@@ -4,6 +4,14 @@
       "long": "Adverb",
       "short": "Adv."
     },
+    "AdverbTo": {
+      "long": "To Adverb",
+      "short": "To Adv.",
+      "kana": {
+        "long": "と Adverb",
+        "short": "と Adv."
+      }
+    },
     "AuxilaryVerb": {
       "long": "Auxiliary",
       "short": "Aux."
@@ -218,40 +226,122 @@
       "Godan": {
         "long": "Godan verb",
         "short": "Godan v.",
-        "types": {
-          "Bu": "Godan verb ending in bu",
-          "Gu": "Godan verb ending in gu",
-          "Ku": "Godan verb ending in ku",
-          "Mu": "Godan verb ending in mu",
-          "Nu": "Godan verb ending in nu",
-          "Ru": "Godan verb ending in ru",
-          "Su": "Godan verb ending in su",
-          "Tsu": "Godan verb ending in tsu",
-          "U": "Godan verb ending in u",
-          "Aru": "Godan verb ending in aru",
-          "USpecial": "Special Godan verb ending in u",
-          "Uru": "Godan verb ending in uru",
-          "RuIrreg": "Irregular Godan verb ending in ru",
-          "IkuYuku": "Godan verb like Iku/Yuku"
-        },
         "kana": {
           "long": "五段 verb",
-          "short": "五段 v.",
-          "types": {
-            "Bu": "五段 verb ending in ぶ",
-            "Gu": "五段 verb ending in ぐ",
-            "Ku": "五段 verb ending in く",
-            "Mu": "五段 verb ending in む",
-            "Nu": "五段 verb ending in ぬ",
-            "Ru": "五段 verb ending in る",
-            "Su": "五段 verb ending in す",
-            "Tsu": "五段 verb ending in つ",
-            "U": "五段 verb ending in う",
-            "Aru": "五段 verb ending in ある",
-            "USpecial": "Special 五段 verb ending in う",
-            "Uru": "五段 verb ending in うる",
-            "RuIrreg": "Irregular 五段 verb ending in る",
-            "IkuYuku": "五段 verb like いく/ゆく"
+          "short": "五段 v."
+        },
+        "types": {
+          "Bu": {
+            "long": "Godan verb ending in bu",
+            "short": "Godan bu v.",
+            "kana": {
+              "long": "五段 verb ending in ぶ",
+              "short": "五段 ぶ v."
+            }
+          },
+          "Gu": {
+            "long": "Godan verb ending in gu",
+            "short": "Godan gu v.",
+            "kana": {
+              "long": "五段 verb ending in ぐ",
+              "short": "五段 ぐ v."
+            }
+          },
+          "Ku": {
+            "long": "Godan verb ending in ku",
+            "short": "Godan ku v.",
+            "kana": {
+              "long": "五段 verb ending in く",
+              "short": "五段 く v."
+            }
+          },
+          "Mu": {
+            "long": "Godan verb ending in mu",
+            "short": "Godan mu v.",
+            "kana": {
+              "long": "五段 verb ending in む",
+              "short": "五段 む v."
+            }
+          },
+          "Nu": {
+            "long": "Godan verb ending in nu",
+            "short": "Godan nu v.",
+            "kana": {
+              "long": "五段 verb ending in ぬ",
+              "short": "五段 ぬ v."
+            }
+          },
+          "Ru": {
+            "long": "Godan verb ending in ru",
+            "short": "Godan ru v.",
+            "kana": {
+              "long": "五段 verb ending in る",
+              "short": "五段 る v."
+            }
+          },
+          "Su": {
+            "long": "Godan verb ending in su",
+            "short": "Godan su v.",
+            "kana": {
+              "long": "五段 verb ending in す",
+              "short": "五段 す v."
+            }
+          },
+          "Tsu": {
+            "long": "Godan verb ending in tsu",
+            "short": "Godan tsu v.",
+            "kana": {
+              "long": "五段 verb ending in つ",
+              "short": "五段 つ v."
+            }
+          },
+          "U": {
+            "long": "Godan verb ending in u",
+            "short": "Godan u v.",
+            "kana": {
+              "long": "五段 verb ending in う",
+              "short": "五段 う v."
+            }
+          },
+          "Aru": {
+            "long": "Godan verb ending in aru",
+            "short": "Godan aru v.",
+            "kana": {
+              "long": "五段 verb ending in ある",
+              "short": "五段 ある v."
+            }
+          },
+          "USpecial": {
+            "long": "Special Godan verb ending in u",
+            "short": "Sp. Godan u v.",
+            "kana": {
+              "long": "Special 五段 verb ending in う",
+              "short": "Sp. 五段 う v."
+            }
+          },
+          "Uru": {
+            "long": "Godan verb ending in uru",
+            "short": "Godan uru v.",
+            "kana": {
+              "long": "五段 verb ending in うる",
+              "short": "五段 うる v."
+            }
+          },
+          "RuIrreg": {
+            "long": "Irregular Godan verb ending in ru",
+            "short": "Irreg. Godan ru v.",
+            "kana": {
+              "long": "Irregular 五段 verb ending in る",
+              "short": "Irreg. 五段 る v."
+            }
+          },
+          "IkuYuku": {
+            "long": "Godan verb like Iku/Yuku",
+            "short": "Godan Iku/Yuku v.",
+            "kana": {
+              "long": "五段 verb like いく/ゆく",
+              "short": "五段 いく/ゆく v."
+            }
           }
         }
       },
