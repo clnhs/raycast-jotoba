@@ -17,7 +17,6 @@ import useJotobaAsync from "../../useJotobaAsync";
 function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
     const { userLanguage, useEnglishFallback, detailsPosDisplayType } =
         getPreferenceValues<Preferences>();
-    const [statusToast, setStatusToast] = useState<Toast>();
     const [sentences, setSentences] = useState([]);
 
     const getJotobaResults = useJotobaAsync("sentences");
@@ -110,7 +109,7 @@ function WordDetailsView({ wordResult }: { wordResult: WordResult }) {
                 );
             } catch (err) {
                 console.error(err);
-                void showToast(
+                showToast(
                     Toast.Style.Failure,
                     "Could not fetch example sentences.",
                     String(err)
