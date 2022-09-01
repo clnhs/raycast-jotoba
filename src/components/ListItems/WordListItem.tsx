@@ -10,13 +10,18 @@ import WordDetailsView from "../Details/WordDetailsView";
 import OpenInJotoba from "../../actions/OpenInJotoba";
 import { parsePos } from "../../JotobaUtils";
 import { useEffect, useState } from "react";
+import WordListItemDetail from "./ListItemDetail/WordListItemDetail";
 
 /**
  * Word item for displaying in search results.
  */
 function WordListItem({ wordResult }: { wordResult: WordResult }) {
-    const { posDisplayType, useEnglishFallback, userLanguage } =
-        getPreferenceValues<Preferences>();
+    const {
+        posDisplayType,
+        useEnglishFallback,
+        userLanguage,
+        showDetailsInList,
+    } = getPreferenceValues<Preferences>();
     const { id, reading, senses } = wordResult;
     const [accessoryTitle, setAccessoryTitle] = useState<string>();
 
@@ -49,8 +54,8 @@ function WordListItem({ wordResult }: { wordResult: WordResult }) {
         <List.Item
             key={id}
             title={reading.kanji || reading.kana}
-            subtitle={reading.kana}
-            accessoryTitle={accessoryTitle}
+            subtitle={reading.kanji ? reading.kana : undefined}
+            accessoryTitle={!showDetailsInList ? accessoryTitle : undefined}
             icon={
                 (wordResult.common && {
                     source: Icon.Dot,
@@ -58,6 +63,7 @@ function WordListItem({ wordResult }: { wordResult: WordResult }) {
                 }) ||
                 undefined
             }
+            detail={<WordListItemDetail wordResult={wordResult} />}
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>

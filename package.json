@@ -11,14 +11,33 @@
             "name": "index",
             "title": "Jotoba",
             "subtitle": "Search Jotoba",
-            "description": "Search Jotoba.de from the comfort of Raycast.",
+            "description": "Search Jotoba.de for words and kanji.",
             "mode": "view",
             "preferences": [
+                {
+                    "type": "dropdown",
+                    "name": "showDetailsInList",
+                    "title": "Display result details...",
+                    "required": false,
+                    "description": "Choose how to display result details.",
+                    "default": "list",
+                    "label": "Display results details...",
+                    "data": [
+                        {
+                            "title": "alongside results list",
+                            "value": "list"
+                        },
+                        {
+                            "title": "in a separate view",
+                            "value": "details"
+                        }
+                    ]
+                },
                 {
                     "name": "userLanguage",
                     "type": "dropdown",
                     "required": false,
-                    "title": "Results Language",
+                    "title": "Display results in...",
                     "description": "In which language do you wish to see to see results?",
                     "default": "English",
                     "data": [
@@ -125,9 +144,9 @@
                     "name": "kanjiDetailsTitleDisplayType",
                     "type": "dropdown",
                     "required": false,
-                    "title": "Show \"On\"/\"Kun\" titles in...",
+                    "title": "Show \"On\"/\"Kun\" titles as...",
                     "description": "Show \"On\"/\"Kun\" titles as...",
-                    "default": "romaji",
+                    "default": "jp",
                     "data": [
                         {
                             "title": "音読み・訓読み",

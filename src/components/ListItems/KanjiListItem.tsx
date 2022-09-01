@@ -2,12 +2,13 @@ import { ActionPanel, List, Action, getPreferenceValues } from "@raycast/api";
 import OpenInJotoba from "../../actions/OpenInJotoba";
 import KanjiDetailsView from "../Details/KanjiDetailsView";
 import { parseReadings } from "../../JotobaUtils";
+import KanjiListItemDetail from "./ListItemDetail/KanjiListItemDetail";
 
 /**
  * Kanji item for displaying in search results.
  */
 function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
-    const { kanjiDetailsTitleDisplayType } = getPreferenceValues<Preferences>();
+    const { kanjiDetailsTitleDisplayType, showDetailsInList } = getPreferenceValues<Preferences>();
     const { literal, stroke_count, grade, jlpt, onyomi, kunyomi } = kanjiResult;
     const onTitle =
         kanjiDetailsTitleDisplayType === "jp"
@@ -32,9 +33,9 @@ function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
     const accessoryTitle = (): string[] => {
         const accessoryTitle: string[] = [];
 
-        if (stroke_count) accessoryTitle.push(`🖌${stroke_count}`);
+        if (stroke_count) accessoryTitle.push(`🖌 ${stroke_count}`);
         if (jlpt) accessoryTitle.push(`JLPT N${jlpt}`);
-        if (grade) accessoryTitle.push(`🎓${grade}`);
+        if (grade) accessoryTitle.push(`🎓 ${grade}`);
 
         return accessoryTitle;
     };
@@ -42,8 +43,9 @@ function KanjiListItem({ kanjiResult }: { kanjiResult: KanjiResult }) {
     return (
         <List.Item
             title={literal}
-            subtitle={subtitle().join("")}
+            subtitle={!showDetailsInList?subtitle().join(""):""}
             accessoryTitle={accessoryTitle().join("・")}
+            detail={<KanjiListItemDetail kanjiResult={kanjiResult}/>}
             actions={
                 <ActionPanel>
                     <ActionPanel.Section>

@@ -137,6 +137,7 @@ interface Preferences {
     posDisplayType: string;
     detailsPosDisplayType: string;
     kanjiDetailsTitleDisplayType: string;
+    showDetailsInList: string;
 }
 
 /**

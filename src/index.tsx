@@ -13,6 +13,7 @@ import useJotobaAsync from "./useJotobaAsync";
  */
 export default function Command() {
     const { state, search } = useSearch();
+    const { showDetailsInList } = getPreferenceValues<Preferences>();
 
     return (
         <List
@@ -20,12 +21,13 @@ export default function Command() {
             onSearchTextChange={search}
             searchBarPlaceholder="Search Jotoba"
             throttle
+            isShowingDetail={showDetailsInList==="list"}
         >
             <List.Section
                 title="Words"
                 subtitle={state.results.words.length + ""}
             >
-                {state.results.words.map(wordResult => (
+                {state.results.words.sort(wordResult=>wordResult.common?-1:0).map(wordResult => (
                     <WordListItem key={wordResult.id} wordResult={wordResult} />
                 ))}
             </List.Section>
