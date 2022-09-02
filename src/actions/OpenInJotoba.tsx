@@ -9,7 +9,7 @@ const OpenInJotoba = ({ searchTerm }: { searchTerm: string }) => {
         <Action.OpenInBrowser
             title="Open on Jotoba.de"
             url={encodeURI(`https://jotoba.de/search/${searchTerm}`)}
-            icon={`${environment.assetsPath}/logos/jotoba_de.png`}
+            icon={{source: "JotoHead.svg"}}
         />
     );
 };
