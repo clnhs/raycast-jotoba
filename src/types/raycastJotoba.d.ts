@@ -1,4 +1,11 @@
 /**
+ * The search passed by Raycast if the user searched directly from the root.
+ */
+interface SearchArguments {
+    term: string;
+}
+
+/**
  * The search state for the main search function which
  * fetches from the https://jotoba.de/api/search/words endpoint.
  */
