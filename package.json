@@ -6,6 +6,7 @@
     "icon": "command-icon.png",
     "author": "clnhs",
     "license": "MIT",
+    "categories": ["Productivity","Other"],
     "commands": [
         {
             "name": "index",
