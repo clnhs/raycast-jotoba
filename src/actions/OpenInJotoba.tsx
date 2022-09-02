@@ -7,7 +7,7 @@ import { Action, environment } from "@raycast/api";
 const OpenInJotoba = ({ searchTerm }: { searchTerm: string }) => {
     return (
         <Action.OpenInBrowser
-            title="Open on Jotoba.de"
+            title="Open search results on Jotoba.de"
             url={encodeURI(`https://jotoba.de/search/${searchTerm}`)}
             icon={{source: "JotoHead.svg"}}
         />
