@@ -2,11 +2,28 @@
     "$schema": "https://www.raycast.com/schemas/extension.json",
     "name": "raycast-jotoba",
     "title": "Jotoba",
+    "keywords": [
+        "Japanese",
+        "日本語",
+        "辞書",
+        "jisho",
+        "Jotoba",
+        "dictionary",
+        "電子辞書",
+        "denshijisho",
+        "kanji",
+        "hiragana",
+        "katakana",
+        "clnhs"
+    ],
     "description": "Search Jotoba.de from the comfort of Raycast.",
     "icon": "command-icon.png",
     "author": "clnhs",
     "license": "MIT",
-    "categories": ["Productivity","Other"],
+    "categories": [
+        "Productivity",
+        "Other"
+    ],
     "commands": [
         {
             "name": "index",
