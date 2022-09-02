@@ -3,6 +3,7 @@
  * fetches from the https://jotoba.de/api/search/words endpoint.
  */
 interface SearchState {
+    searchText: string;
     results: JotobaWordsSearchResults;
     isLoading: boolean;
 }

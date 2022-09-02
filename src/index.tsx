@@ -21,27 +21,47 @@ export default function Command() {
             onSearchTextChange={search}
             searchBarPlaceholder="Search Jotoba"
             throttle
-            isShowingDetail={showDetailsInList==="list"}
+            isShowingDetail={
+                showDetailsInList === "list" && state.searchText !== ""
+            }
         >
-            <List.Section
-                title="Words"
-                subtitle={state.results.words.length + ""}
-            >
-                {state.results.words.sort(wordResult=>wordResult.common?-1:0).map(wordResult => (
-                    <WordListItem key={wordResult.id} wordResult={wordResult} />
-                ))}
-            </List.Section>
-            <List.Section
-                title="Kanji"
-                subtitle={state.results.kanji.length + ""}
-            >
-                {state.results.kanji.map(kanjiResult => (
-                    <KanjiListItem
-                        key={kanjiResult.id}
-                        kanjiResult={kanjiResult}
-                    />
-                ))}
-            </List.Section>
+            {state.searchText !== "" && (
+                <>
+                    <List.Section
+                        title="Words"
+                        subtitle={state.results.words.length + ""}
+                    >
+                        {state.results.words
+                            .sort(wordResult => (wordResult.common ? -1 : 0))
+                            .map(wordResult => (
+                                <WordListItem
+                                    key={wordResult.id}
+                                    wordResult={wordResult}
+                                />
+                            ))}
+                    </List.Section>
+                    <List.Section
+                        title="Kanji"
+                        subtitle={state.results.kanji.length + ""}
+                    >
+                        {state.results.kanji.map(kanjiResult => (
+                            <KanjiListItem
+                                key={kanjiResult.id}
+                                kanjiResult={kanjiResult}
+                            />
+                        ))}
+                    </List.Section>
+                </>
+            )}
+            {state.searchText === "" && (
+                <List.EmptyView
+                    icon={{ source: "JotoHead.svg" }}
+                    title={"Type something to start your search."}
+                    description={
+                        "The Jotoba Project is made possible by JojiiOfficial and Yukaru.\n Raycast extension by clnhs."
+                    }
+                />
+            )}
         </List>
     );
 }
@@ -52,6 +72,7 @@ export default function Command() {
 function useSearch() {
     const getJotobaResults = useJotobaAsync();
     const [state, setState] = useState<SearchState>({
+        searchText: "",
         results: { words: [], kanji: [] },
         isLoading: false,
     });
@@ -72,7 +93,11 @@ function useSearch() {
 
         try {
             if (searchText.length > 0) {
-                setState(prevState => ({ ...prevState, isLoading: true }));
+                setState(prevState => ({
+                    ...prevState,
+                    searchText,
+                    isLoading: true,
+                }));
 
                 const results = (await getJotobaResults({
                     bodyData: {
@@ -87,6 +112,7 @@ function useSearch() {
                 const kanji = results.kanji as JotobaKanji[];
 
                 setState(prevState => ({
+                    searchText,
                     isLoading: false,
                     results: {
                         words: words.map(wordEntry => ({
