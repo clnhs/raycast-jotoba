@@ -1,7 +1,7 @@
 {
     "$schema": "https://www.raycast.com/schemas/extension.json",
-    "name": "raycast-jotoba",
-    "title": "Jotoba",
+    "name": "jotoba",
+    "title": "Jotoba — Japanese Dictionary",
     "keywords": [
         "Japanese",
         "日本語",
