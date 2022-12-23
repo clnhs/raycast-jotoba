@@ -12,23 +12,22 @@ import useJotobaAsync from "./useJotobaAsync";
  * The main command for Raycast Jotoba
  */
 export default function Command(props: { arguments: SearchArguments }) {
-  const [searchText, setSearchText] = useState("");
   const { term: argumentSearchTerm } = props.arguments;
+  const [searchText, setSearchText] = useState(argumentSearchTerm ?? "");
   const { state, search } = useSearch();
   const { showDetailsInList } = getPreferenceValues<Preferences>();
 
   useEffect(() => {
-    if (argumentSearchTerm && argumentSearchTerm.length > 0) {
-      setSearchText(argumentSearchTerm);
-      search(argumentSearchTerm);
+    if (searchText.trim().length > 0) {
+      void search(searchText);
     }
-  }, [argumentSearchTerm]);
+  }, [searchText]);
 
   return (
     <List
       searchText={searchText}
       isLoading={state.isLoading}
-      onSearchTextChange={search}
+      onSearchTextChange={setSearchText}
       searchBarPlaceholder="Search Jotoba"
       throttle
       isShowingDetail={showDetailsInList === "list" && state.searchText !== ""}
