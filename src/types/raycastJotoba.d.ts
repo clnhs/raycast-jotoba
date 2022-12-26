@@ -142,6 +142,7 @@ interface Preferences {
   detailsPosDisplayType: string;
   kanjiDetailsTitleDisplayType: string;
   showDetailsInList: string;
+  commonWordsFirst: boolean;
 }
 
 /**
