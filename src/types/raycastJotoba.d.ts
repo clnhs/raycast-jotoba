@@ -145,6 +145,12 @@ interface Preferences {
   commonWordsFirst: boolean;
 }
 
+interface fetchAsyncConfig {
+  method: "GET" | "POST";
+  signal?: AbortSignal;
+  bodyData?: object;
+}
+
 /**
  * A data JSON shape... Sort of a catch-all but...
  */
