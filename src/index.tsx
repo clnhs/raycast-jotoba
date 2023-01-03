@@ -18,9 +18,7 @@ export default function Command(props: { arguments: SearchArguments }) {
   const { showDetailsInList, commonWordsFirst } = getPreferenceValues<Preferences>();
 
   useEffect(() => {
-    if (searchText.trim().length > 0) {
-      void search(searchText);
-    }
+    void search(searchText);
   }, [searchText]);
 
   return (
