@@ -119,6 +119,8 @@ function useSearch() {
             })),
           },
         }));
+      } else {
+        setState((prevState) => ({ ...prevState, searchText: "", isLoading: false }));
       }
     } catch (error) {
       if (error instanceof AbortError) return;
