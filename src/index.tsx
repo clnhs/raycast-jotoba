@@ -30,7 +30,7 @@ export default function Command(props: { arguments: SearchArguments }) {
       throttle
       isShowingDetail={showDetailsInList === "list" && state.searchText !== ""}
     >
-      {state.searchText !== "" && (
+      {state.searchText !== "" ? (
         <>
           <List.Section title="Words" subtitle={state.results.words.length + ""}>
             {(commonWordsFirst
@@ -49,8 +49,7 @@ export default function Command(props: { arguments: SearchArguments }) {
             ))}
           </List.Section>
         </>
-      )}
-      {state.searchText === "" && (
+      ) : (
         <List.EmptyView
           icon={{ source: "JotoHead.svg" }}
           title={"Type something to start your search."}
